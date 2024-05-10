@@ -23,7 +23,6 @@ jobs:
     name: "Terraform Init"
     runs-on: "ubuntu-latest"
     needs: login
-    depends-on: login
     steps:
       - name: Checkout
         uses: actions/checkout@v4
