@@ -1,0 +1,1 @@
+# Bucket para estado remoto
