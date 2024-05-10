@@ -10,14 +10,13 @@ jobs:
   login:
     name: "AWS Login"
     runs-on: "ubuntu-latest"
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: 'us-east-1'
     steps:
       - name: "Configure AWS Credentials" 
         uses: aws-actions/configure-aws-credentials@v4
-
+        with:
+          aws-region: us-east-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   init:
     name: "Terraform Init"
     runs-on: "ubuntu-latest"
@@ -27,8 +26,4 @@ jobs:
         uses: actions/checkout@v4
       - name: Terraform init
         working-directory: ./src
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
         run: terraform init -var-file="dev.tfvars"
