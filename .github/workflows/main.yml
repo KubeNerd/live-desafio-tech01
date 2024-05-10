@@ -23,4 +23,4 @@ jobs:
       
       - name: Terraform init
         working-directory: ./src
-        run: terraform init -var-file=dev.tfvars"
+        run: terraform init -var-file="dev.tfvars"
