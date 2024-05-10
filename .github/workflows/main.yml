@@ -27,10 +27,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Terraform Init and Apply"
+
+      - name: Terraforn Init
         working-directory: ./src
         run: |
           terraform init -var-file=dev.tfvars \
             -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}" \
             -backend-config="key=${{ secrets.AWS_BUCKET_FILE }}" \
-            -var-file="dev.tfvars" && \
-          terraform apply -var-file=dev.tfvars --auto-approve
+            -var-file="dev.tfvars"
+            
+      - name: Terraform Apply 
+        working-directory: ./src
+        run: terraform apply -var-file="dev.tfvars" --auto-approve
