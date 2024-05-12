@@ -1,5 +1,4 @@
 name: "Meu Terraform"
-
 on:
   push: 
     branches: ["main"]
@@ -7,8 +6,8 @@ on:
   workflow_dispatch:
 
 jobs: 
-  terraform:
-    name: "Terraform Apply"
+  login:
+    name: "AWS Login"
     runs-on: "ubuntu-latest"
     steps:
       - name: "Configure AWS Credentials" 
@@ -17,14 +16,19 @@ jobs:
           aws-region: us-east-1
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          
+
+  deploy:
+    name: "Terraform Deploy"
+    runs-on: "ubuntu-latest"
+    needs: login
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Terraform init
+      - name: "Terraform Init"
         working-directory: ./src
-        run: terraform init -var-file="dev.tfvars"
+        run: terraform init -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}" -backend-config="key=${{ secrets.AWS_BUCKET_FILE }}"
 
-      - name: Terraform Apply 
+      - name: "Terraform Apply"
         working-directory: ./src
-        run: terraform apply -var-file="dev.tfvars" --auto-approve
+        run: terraform apply --auto-approve
